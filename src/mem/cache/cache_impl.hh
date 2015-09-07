@@ -1898,6 +1898,9 @@ LatticeCache<TagStore>::LatticeCache( const Params *p, TagStore *tags )
 	num_tcs = p->num_tcs;
 	
 	H_min = p->H_min;
+    
+    for (unsigned i = 0; i < 4; i++)
+        phase_combinations[i] = 0;
 	
 	system = p->system;
 	
@@ -1927,6 +1930,43 @@ LatticeCache<TagStore>::adjustPartition()
 				else decision[i] = 0;
 			}
 		}
+        
+        if (num_tcs == 2)
+        {
+            int total_misses_L = this->tags->lookup_misses(0);
+            int total_misses_H = this->tags->lookup_misses(1);
+            int total_hits_L = 0;
+            int total_hits_H = 0;
+            // 0 means cache insensitive, 1 means cache sensitive
+            int L_phase, H_phase;
+            for (unsigned i = 0; i < assoc; i++)
+            {
+                total_hits_L += this->tags->lookup_umon(i, 0);
+                total_hits_H += this->tags->lookup_umon(i, 1);
+            }
+            if (total_misses_L == 0) L_phase = 0;
+            else{
+                if (total_hits_L*1.0/total_misses_L < 0.5) L_phase = 0;
+                else L_phase = 1;
+            }
+            if (total_misses_H == 0) H_phase = 0;
+            else{
+                if (total_hits_H*1.0/total_misses_H < 0.5) H_phase = 0;
+                else H_phase = 1;
+            }
+            if (L_phase == 0)
+            {
+                if (H_phase == 0) phase_combinations[0] += 1;
+                else phase_combinations[1] += 1;
+            }
+            else
+            {
+                if (H_phase == 0) phase_combinations[2] += 1;
+                else phase_combinations[3] += 1;
+            }
+            printf("number of different phase combinations: %d, %d, %d, %d\n", phase_combinations[0], 
+            phase_combinations[1], phase_combinations[2], phase_combinations[3]);
+        }
 		
 		for (unsigned i = 0; i < num_tcs-1; i++)
 		{
