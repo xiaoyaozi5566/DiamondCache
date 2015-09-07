@@ -1944,6 +1944,9 @@ LatticeCache<TagStore>::adjustPartition()
                 total_hits_L += this->tags->lookup_umon(i, 0);
                 total_hits_H += this->tags->lookup_umon(i, 1);
             }
+            printf("total_misses_L %d, total_hits_L %d\n", total_misses_L, total_hits_L);
+            printf("total_misses_H %d, total_hits_H %d\n", total_misses_H, total_hits_H);
+            
             if (total_misses_L == 0) L_phase = 0;
             else{
                 if (total_hits_L*1.0/total_misses_L < 0.5) L_phase = 0;
