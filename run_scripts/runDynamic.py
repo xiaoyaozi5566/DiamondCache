@@ -674,6 +674,7 @@ def diamond_cache():
                     command += "    --maxtick=2000000000000000 \\\n"
                     command += "    --numpids=3 \\\n"
                     command += "    --numcores=4 \\\n"
+                    command += "    --L_assoc=8 \\\n"
                     command += "    --th_inc=" + str(threshold) + " \\\n"
                     command += "    --th_dec=" + str(threshold) + " \\\n"
                     command += "    --p0='" + specintinvoke[p0] + "'\\\n"

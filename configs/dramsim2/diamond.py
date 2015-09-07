@@ -74,7 +74,7 @@ parser.add_option("--dynamic_cache", action="store_true")
 parser.add_option("--util_cache", action="store_true")
 parser.add_option("--lattice_cache", action="store_true")
 parser.add_option("--diamond_cache", action="store_true")
-parser.add_option("--L_assoc", type="int", default=4,
+parser.add_option("--L_assoc", type="int", default=8,
         help="associativity for Low partition")
 parser.add_option("--H_min", type="int", default=1,
         help="minimal # of ways reserved for High")
