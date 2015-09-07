@@ -2006,17 +2006,22 @@ LatticeCache<TagStore>::adjustPartition()
 						numSets = this->tags->dec_size(i, num_tcs-1);
 					}
 					// write back if the block is dirty
+                    int num_dirtyblk = 0;
 					for(unsigned k = 0; k < numSets; k++){
 						BlkType *tempBlk = this->tags->get_evictBlk(winner, k);
 						if (tempBlk->threadID < winner){
 							if(tempBlk->isDirty() && tempBlk->isValid())
-								this->allocateWriteBuffer(this->writebackBlk(tempBlk, tempBlk->threadID), curTick(), true); 
+							{
+                                this->allocateWriteBuffer(this->writebackBlk(tempBlk, tempBlk->threadID), curTick(), true);
+                                num_dirtyblk++;
+                            } 
 	
 							this->tags->invalidateBlk(tempBlk, winner);
 	
 							tempBlk->threadID = winner;	
 						}	
 					}
+                    if (num_tcs == 2) printf("number of dirty blocks is %d\n", num_dirtyblk);
 				}
 			}
 		}
