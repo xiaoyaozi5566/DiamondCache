@@ -16,12 +16,12 @@ DIALRU::DIALRU( unsigned _numSets,
         unsigned _low_assoc)
     : LRU(_numSets, _blkSize, _assoc, _hit_latency )
 {
-	assoc = _assoc - _low_assoc;
+	assoc = _assoc;
 	num_tcs = _num_tcs;
 	per_assoc = new unsigned[num_tcs];
     per_assoc[0] = _low_assoc;
 	for (unsigned i = 1; i < num_tcs; i++)
-		per_assoc[i] = assoc/(num_tcs-1);
+		per_assoc[i] = (assoc - _low_assoc)/(num_tcs-1);
 	// umon counters
 	umon_counters = new unsigned*[num_tcs];
 	for (unsigned i = 0; i < num_tcs; i++)
