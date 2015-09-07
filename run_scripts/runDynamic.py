@@ -742,5 +742,5 @@ def count_phases():
 # dynamic_cache4()
 # baseline_QoS()
 # dynamic_QoS()
-# diamond_cache()
-count_phases()
+diamond_cache()
+# count_phases()
