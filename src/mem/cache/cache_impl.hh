@@ -2069,6 +2069,9 @@ DiamondCache<TagStore>::DiamondCache( const Params *p, TagStore *tags )
 	num_tcs = p->num_tcs;
 	
 	H_min = p->H_min;
+    
+    last_inc = 0;
+    last_dec = 0;
 	
 	system = p->system;
 	
@@ -2084,8 +2087,6 @@ DiamondCache<TagStore>::adjustPartition()
 		std::cout << "Adjust partition @ tick " << curTick() << std::endl;
 		// 0: remain, 1: increase, 2: decrease
 		unsigned decision;
-        unsigned last_inc = 0;
-        unsigned last_dec = 0;
         unsigned numSets = 0;
 		unsigned cur_assoc = this->tags->assoc_of_tc(0);
 		int total_misses = this->tags->lookup_misses(0);
@@ -2102,9 +2103,9 @@ DiamondCache<TagStore>::adjustPartition()
         // increase partition size
         if (decision == 1)
         {
-            if (this->tags->assoc_of_tc(last_inc) > H_min)
+            if (this->tags->assoc_of_tc(last_inc + 1) > H_min)
             {
-                this->tags->inc_size(0, last_inc);
+                this->tags->inc_size(0, last_inc + 1);
             }
             last_inc = (last_inc + 1) % (num_tcs - 1);
         }
@@ -2113,18 +2114,18 @@ DiamondCache<TagStore>::adjustPartition()
         {
             if (this->tags->assoc_of_tc(0) > H_min)
             {
-                numSets = this->tags->dec_size(0, last_dec);
+                numSets = this->tags->dec_size(0, last_dec + 1);
             
     			// write back if the block is dirty
     			for(unsigned k = 0; k < numSets; k++){
-    				BlkType *tempBlk = this->tags->get_evictBlk(last_dec, k);
-    				if (tempBlk->threadID != last_dec){
+    				BlkType *tempBlk = this->tags->get_evictBlk(last_dec + 1, k);
+    				if (tempBlk->threadID != last_dec + 1){
     					if(tempBlk->isDirty() && tempBlk->isValid())
     						this->allocateWriteBuffer(this->writebackBlk(tempBlk, tempBlk->threadID), curTick(), true); 
 
-    					this->tags->invalidateBlk(tempBlk, last_dec);
+    					this->tags->invalidateBlk(tempBlk, last_dec + 1);
 
-    					tempBlk->threadID = last_dec;	
+    					tempBlk->threadID = last_dec + 1;	
     				}	
     			}
             }

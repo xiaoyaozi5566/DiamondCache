@@ -144,7 +144,7 @@ DIALRU::inc_size(uint64_t tid0, uint64_t tid1){
 	per_assoc[tid0] += 1;
 	per_assoc[tid1] -= 1;
 	
-	fprintf(stderr, "assoc: %d %d %d %d\n", per_assoc[0], per_assoc[1], per_assoc[2], per_assoc[3]);
+	fprintf(stderr, "assoc: %d %d %d\n", per_assoc[0], per_assoc[1], per_assoc[2]);
 	
 	for( unsigned i = 0; i < numSets; i++){
 		// increase the size of L partition
@@ -178,7 +178,7 @@ DIALRU::dec_size(uint64_t tid0, uint64_t tid1){
 	per_assoc[tid0] -= 1;
 	per_assoc[tid1] += 1;
 	
-	fprintf(stderr, "assoc: %d %d %d %d\n", per_assoc[0], per_assoc[1], per_assoc[2], per_assoc[3]);
+	fprintf(stderr, "assoc: %d %d %d\n", per_assoc[0], per_assoc[1], per_assoc[2]);
 	
 	for( unsigned i = 0; i < numSets; i++){
 		// increase the size of H partition
