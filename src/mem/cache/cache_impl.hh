@@ -1925,9 +1925,15 @@ LatticeCache<TagStore>::adjustPartition()
 			
 			if ( total_misses == 0 ) decision[i] = 2;
 			else{
-				if (Uinc*1.0/total_misses > th_inc) decision[i] = 1;
-				else if (Udec*1.0/total_misses < th_dec) decision[i] = 2;
-				else decision[i] = 0;
+				if (i == 0) {
+                    if (Uinc*1.0/total_misses > (th_inc/2)) decision[i] = 1;
+    				else if (Udec*1.0/total_misses < (th_dec/2)) decision[i] = 2;
+    				else decision[i] = 0;
+				} else{
+                    if (Uinc*1.0/total_misses > th_inc) decision[i] = 1;
+    				else if (Udec*1.0/total_misses < th_dec) decision[i] = 2;
+    				else decision[i] = 0;
+				} 
 			}
 		}
         
